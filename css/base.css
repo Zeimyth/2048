@@ -5,14 +5,23 @@ body {
 }
 
 .gamegrid {
-	width: 500px;
-	height: 500px;
+	width: 400px;
+	height: 400px;
 	margin: 0 auto;
 	text-align: left;
 	padding: 15px;
 	background-color: #eee;
 
 	border: 1px solid #333;
+	border-radius: 15px;
+	-moz-border-radius: 15px;
+}
+
+.empty {
+	width: 70;
+	height: 70;
+	background-color: #666;
+
 	border-radius: 15px;
 	-moz-border-radius: 15px;
 }
