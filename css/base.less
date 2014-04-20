@@ -1,7 +1,7 @@
 body {
 	margin: 50px 0;
 	padding: 0;
-	text-align:center;
+	text-align: center;
 }
 
 .gamegrid {
@@ -17,14 +17,34 @@ body {
 	-moz-border-radius: 15px;
 }
 
-.tile {
-	width: 70;
-	height: 70;
-	
-	border-radius: 15px;
-	-moz-border-radius: 15px;
+table {
+	border-spacing: 0;
 }
 
-.empty {
-	background-color: #666;
+.tile {
+	width: 90;
+	height: 90;
+	margin: 5px;
+
+	border-radius: 15px;
+	-moz-border-radius: 15px;
+	
+	&.empty {
+		background-color: #666;
+	}
+
+	&.top {
+		margin-top: 0px;
+	}
+
+	&.left {
+		margin-left: 0px;
+	}
+
+	&.right {
+		margin-right: 0px;
+	}
+	&.bottom {
+		margin-bottom: 0px;
+	}
 }
