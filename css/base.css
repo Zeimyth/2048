@@ -6,9 +6,13 @@ body {
 
 .gamegrid {
 	width: 500px;
+	height: 500px;
 	margin: 0 auto;
 	text-align: left;
 	padding: 15px;
-	border: 1px solid #333;
 	background-color: #eee;
+
+	border: 1px solid #333;
+	border-radius: 15px;
+	-moz-border-radius: 15px;
 }
