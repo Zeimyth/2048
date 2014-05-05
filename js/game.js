@@ -1,9 +1,13 @@
 goog.provide('zeimyth.game');
 
-goog.require('goog.dom');
+goog.require('zeimyth.Board');
+goog.require('zeimyth.events');
 
-zeimyth.game = function() {
-	alert('Hi there!');
+zeimyth.game = {
+	run: function() {
+		var board = new zeimyth.Board();
+		zeimyth.events.initialize(board);
+	}
 };
 
-goog.exportSymbol('zeimyth.game', zeimyth.game);
+goog.exportSymbol('zeimyth.game.run', zeimyth.game.run);
