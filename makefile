@@ -25,6 +25,7 @@ help:
 	@echo "### Common Targets ###"
 	@echo "clean         Clean all targets"
 	@echo "help          Print this help"
+	@echo "install       Sets up the folder structure and runs the initial build"
 	@echo
 	@echo "### Build Targets ###"
 	@echo "css           Less CSS compiler"
@@ -64,3 +65,15 @@ js:
 
 clean-js:
 	rm -f $(JS_DEST)
+
+###############################################
+# Install Target                              #
+###############################################
+
+.PHONY: init install
+install: init js css
+
+init:
+	mkdir target
+	mkdir target/js
+	mkdir target/css
