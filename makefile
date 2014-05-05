@@ -61,6 +61,9 @@ js:
 		--namespace "$(JS_NAMESPACE)" \
 		--output_mode=compiled \
 		--compiler_jar=$(CLOSURE_JAR) \
+		--compiler_flags="--warning_level=VERBOSE" \
+		--compiler_flags="--jscomp_off=es5Strict" \
+		--compiler_flags="--jscomp_error=checkTypes" \
 		--output_file=$(JS_DEST)
 
 clean-js:
