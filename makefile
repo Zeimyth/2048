@@ -11,7 +11,7 @@ CLOSURE_BUILDER := tools/closure-lib/closure/bin/build/closurebuilder.py
 CLOSURE_LIBRARY := tools/closure-lib/
 CLOSURE_JAR := tools/closure/compiler.jar
 JS_FILES := js/
-JS_NAMESPACE := zeimyth.game
+JS_NAMESPACE := zeimyth.game.base
 JS_DEST := target/js/game-compiled.js
 
 ###############################################
