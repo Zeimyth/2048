@@ -55,15 +55,28 @@ clean-css:
 
 .PHONY: js clean-js
 js:
-	$(CLOSURE_BUILDER) \
-		--root $(CLOSURE_LIBRARY) \
-		--root $(JS_FILES) \
-		--namespace "$(JS_NAMESPACE)" \
-		--output_mode=compiled \
-		--compiler_jar=$(CLOSURE_JAR) \
-		--compiler_flags="--warning_level=VERBOSE" \
-		--compiler_flags="--jscomp_off=es5Strict" \
-		--compiler_flags="--jscomp_error=checkTypes" \
+	$(CLOSURE_BUILDER)                                 \
+		--root $(CLOSURE_LIBRARY)                      \
+		--root $(JS_FILES)                             \
+		--namespace "$(JS_NAMESPACE)"                  \
+		--output_mode=compiled                         \
+		--compiler_jar=$(CLOSURE_JAR)                  \
+		-f "--warning_level=VERBOSE"                   \
+		-f "--output_wrapper=(function(){%output%})()" \
+		-f "--language_in=ECMASCRIPT5"                 \
+		-f "--jscomp_off=accessControls"               \
+		-f "--jscomp_off=es5Strict"                    \
+		-f "--jscomp_off=checkRegExp"                  \
+		-f "--jscomp_error=checkTypes"                 \
+		-f "--jscomp_error=checkVars"                  \
+		-f "--jscomp_error=deprecated"                 \
+		-f "--jscomp_error=fileoverviewTags"           \
+		-f "--jscomp_error=invalidCasts"               \
+		-f "--jscomp_error=missingProperties"          \
+		-f "--jscomp_error=nonStandardJsDocs"          \
+		-f "--jscomp_error=strictModuleDepCheck"       \
+		-f "--jscomp_error=undefinedVars"              \
+		-f "--jscomp_error=unknownDefines"             \
 		--output_file=$(JS_DEST)
 
 clean-js:
