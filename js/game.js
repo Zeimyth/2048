@@ -21,5 +21,3 @@ zeimyth.game.run = function() {
 	zeimyth.game.gameBoard.render();
 	zeimyth.events.initialize(zeimyth.game.gameBoard);
 };
-
-

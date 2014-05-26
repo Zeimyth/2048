@@ -8,10 +8,13 @@ goog.require('goog.dom');
 zeimyth.Board = function() {
 	var dimensions = zeimyth.game.getDimensions();
 
+	/** Reciprocal of chance of getting a 4 when a new tile is generated */
+	this.fourWeight = 10;
+
 	this.domHelper = goog.dom.getDomHelper();
 
 	// Stores the current values in the game grid. Stored in column-major form.
-	this.grid = this.initializeGrid(dimensions);
+	/*this.grid = */this.initializeGrid(dimensions);
 };
 
 /**
@@ -20,7 +23,7 @@ zeimyth.Board = function() {
  * @private
  */
 zeimyth.Board.prototype.initializeGrid = function(dimensions) {
-	var grid = [];
+	this.grid = [];
 
 	for (var x = 0; x < dimensions.width; x++) {
 		var column = [];
@@ -29,10 +32,52 @@ zeimyth.Board.prototype.initializeGrid = function(dimensions) {
 			column.push(0);
 		}
 
-		grid.push(column);
+		this.grid.push(column);
 	}
 
-	return grid;
+	this.placeRandomTile();
+	this.placeRandomTile();
+
+	return this.grid;
+};
+
+/**
+ * @private
+ */
+zeimyth.Board.prototype.placeRandomTile = function() {
+
+	var dimensions = zeimyth.game.getDimensions();
+
+	/**
+	 * @return {{x: number, y: number}}
+	 */
+	var randomCoord = function() {
+		var x = zeimyth.util.getRandom(dimensions.width);
+		var y = zeimyth.util.getRandom(dimensions.height);
+
+		return {x: x, y: y};
+	};
+
+	var randomValue = function() {
+		var roll = zeimyth.util.getRandom(this.fourWeight);
+		var two = 1;
+		var four = 1;
+
+		if (roll) {
+			return two;
+		}
+		else {
+			return four;
+		}
+	};
+
+	var coord = randomCoord();
+
+	while (this.grid[coord.x][coord.y]) {
+		coord = randomCoord();
+	}
+
+	this.grid[coord.x][coord.y] = randomValue();
 };
 
 /**
