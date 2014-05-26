@@ -29,7 +29,7 @@ zeimyth.Board.prototype.initializeGrid = function(dimensions) {
 		var column = [];
 
 		for (var y = 0; y < dimensions.height; y++) {
-			column.push(0);
+			column.push({className: 'empty'});
 		}
 
 		this.grid.push(column);
@@ -45,6 +45,7 @@ zeimyth.Board.prototype.initializeGrid = function(dimensions) {
  * @private
  */
 zeimyth.Board.prototype.placeRandomTile = function() {
+	var me = this;
 
 	var dimensions = zeimyth.game.getDimensions();
 
@@ -59,9 +60,9 @@ zeimyth.Board.prototype.placeRandomTile = function() {
 	};
 
 	var randomValue = function() {
-		var roll = zeimyth.util.getRandom(this.fourWeight);
-		var two = 1;
-		var four = 1;
+		var roll = zeimyth.util.getRandom(me.fourWeight);
+		var two = {className: 'two', value: '2'};
+		var four = {className: 'four', value: '4'};
 
 		if (roll) {
 			return two;
@@ -73,7 +74,7 @@ zeimyth.Board.prototype.placeRandomTile = function() {
 
 	var coord = randomCoord();
 
-	while (this.grid[coord.x][coord.y]) {
+	while (this.grid[coord.x][coord.y].value) {
 		coord = randomCoord();
 	}
 
@@ -91,8 +92,20 @@ zeimyth.Board.prototype.render = function() {
 	for (var y = 0; y < dimensions.height; y++) {
 		var row = this.domHelper.createDom('div', 'row');
 
+		var topBottomClass = '';
+		if (y === 0) topBottomClass = ' top';
+		if (y == dimensions.height - 1) topBottomClass = ' bottom';
+
 		for (var x = 0; x < dimensions.width; x++) {
-			var tile = this.domHelper.createDom('div', this.grid[x][y] ? 'tile two' : 'tile empty', this.grid[x][y] ? this.domHelper.createTextNode('2') : null);
+			var leftRightClass = '';
+			if (x === 0) leftRightClass = ' left';
+			if (x === dimensions.width - 1) leftRightClass = ' right';
+
+			var tile = this.domHelper.createDom(
+				'div',
+				'tile ' + this.grid[x][y].className + topBottomClass + leftRightClass,
+				this.grid[x][y].value ? this.domHelper.createTextNode(this.grid[x][y].value) : null
+			);
 
 			this.domHelper.appendChild(row, tile);
 		}
