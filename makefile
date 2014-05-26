@@ -101,7 +101,8 @@ clean-deps:
 ###############################################
 
 .PHONY: init install
-install: init js css
+install: init js css deps
+	echo "To run the game, open index.html or uncompiled.html in a web browser."
 
 init:
 	mkdir target
