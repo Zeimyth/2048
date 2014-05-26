@@ -3,21 +3,23 @@ goog.provide('zeimyth.game');
 goog.require('zeimyth.Board');
 goog.require('zeimyth.events');
 
-(function gameClosure() {
-	
-	/** @type {{width: number, height: number}} */
-	var dimensions = { width: 4, height: 4 };
-	
-	zeimyth.game.getDimensions = function() { return dimensions; };
+/**
+ * @type {{width: number, height: number}}
+ *
+ * @private
+ */
+zeimyth.game.dimensions = { width: 4, height: 4 };
 
-	var gameBoard = new zeimyth.Board();
+zeimyth.game.getDimensions = function() { return zeimyth.game.dimensions; };
 
-	zeimyth.game.getBoard = function() { return gameBoard; };
+/** @private */
+zeimyth.game.gameBoard = new zeimyth.Board();
 
-	zeimyth.game.run = function() {
-		zeimyth.events.initialize(gameBoard);
-	};
+zeimyth.game.getBoard = function() { return zeimyth.game.gameBoard; };
 
-})();
+zeimyth.game.run = function() {
+	zeimyth.game.gameBoard.render();
+	zeimyth.events.initialize(zeimyth.game.gameBoard);
+};
 
 
