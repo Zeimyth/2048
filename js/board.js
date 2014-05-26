@@ -17,6 +17,14 @@ zeimyth.Board = function() {
 	/*this.grid = */this.initializeGrid(dimensions);
 };
 
+/** @enum */
+zeimyth.Board.Directions = {
+	'right' : 0,
+	'up' : 1,
+	'left': 2,
+	'down' : 3
+};
+
 /**
  * @param {{width: number, height: number}} dimensions
  *
@@ -61,8 +69,8 @@ zeimyth.Board.prototype.placeRandomTile = function() {
 
 	var randomValue = function() {
 		var roll = zeimyth.util.getRandom(me.fourWeight);
-		var two = {className: 'two', value: '2'};
-		var four = {className: 'four', value: '4'};
+		var two = {className: 'two', value: 2};
+		var four = {className: 'four', value: 4};
 
 		if (roll) {
 			return two;
@@ -115,13 +123,8 @@ zeimyth.Board.prototype.render = function() {
 	}
 };
 
-zeimyth.Board.left = 0;
-zeimyth.Board.up = 1;
-zeimyth.Board.right = 2;
-zeimyth.Board.down = 3;
-
 /**
- * @param {number} dir
+ * @param {string} dir
  */
 zeimyth.Board.prototype.handleDirection = function(dir) {
 	this.shiftGrid(dir);
