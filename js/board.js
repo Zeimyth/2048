@@ -132,10 +132,63 @@ zeimyth.Board.prototype.handleDirection = function(dir) {
 };
 
 /**
- * @param {number} dir
+ * @param {string} dir
  *
  * @private
  */
 zeimyth.Board.prototype.shiftGrid = function(dir) {
-	alert('Dir ' + dir + ' pressed!');
+	var dimensions = zeimyth.game.getDimensions();
+
+	switch(zeimyth.Board.Directions[dir]) {
+		case zeimyth.Board.Directions['up']:
+			if (goog.array.some(this.grid, function(row) {
+				for (var x = 0; x < dimensions.width - 1; x++) {
+					if (!row[x].value && row[x+1].value) {
+						return true;
+					}
+					else if (row[x].value && row[x].value == row[x+1].value) {
+						return true;
+					}
+				}
+
+				return false;
+			})) {
+				goog.array.forEach(this.grid, function(row) {
+					for (var x = 1; x < dimensions.width; x++) {
+						if (!!row[x].value) {
+							var done = false;
+							for (var dx = x - 1; dx >= 0 && !done; dx--) {
+								if (!row[dx].value) {
+									row[dx] = row[x];
+									row[x] = {className: 'empty'};
+									x--;
+								}
+								else if (row[dx].value == row[x].value && !row[dx].locked) {
+									var newClassName = '';
+									var newValue = 2 * row[x].value;
+
+									if (row[x].value == '2') {
+										newClassName = 'four';
+									}
+									else {
+										newClassName = 'eight';
+									}
+
+									row[dx] = {className: newClassName, value: newValue, locked: true};
+									row[x] = {className: 'empty'};
+									done = true;
+								}
+								else {
+									done = true;
+								}
+							}
+						}
+					}
+					for (var x = 0; x < dimensions.width; x++) {
+						row[x].locked = false;
+					}
+				});
+				this.placeRandomTile();
+			}
+	}
 };

@@ -12,16 +12,16 @@ goog.require('zeimyth.Board');
 			e = e || window.event;
 			switch(e.which || e.keyCode) {
 				case 37: // left
-					board.handleDirection(zeimyth.Board.left);
+					board.handleDirection('left');
 					break;
 				case 38: // up
-					board.handleDirection(zeimyth.Board.up);
+					board.handleDirection('up');
 					break;
 				case 39: // right
-					board.handleDirection(zeimyth.Board.right);
+					board.handleDirection('right');
 					break;
 				case 40: // down
-					board.handleDirection(zeimyth.Board.down);
+					board.handleDirection('down');
 					break;
 				default:
 					return; // exit this handler for other keys
