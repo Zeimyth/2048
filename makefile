@@ -7,12 +7,15 @@ LESSC := tools/less/bin/lessc
 LESS_FILES := $(shell find css/ -name "*.less")
 LESS_DEST := target/css/base.css
 
-CLOSURE_BUILDER := tools/closure-lib/closure/bin/build/closurebuilder.py
-CLOSURE_LIBRARY := tools/closure-lib/
+CLOSURE_LIBRARY := tools/closure-lib
+CLOSURE_BASE := $(CLOSURE_LIBRARY)/closure/bin/build
+CLOSURE_BUILDER := $(CLOSURE_BASE)/closurebuilder.py
+CLOSURE_DEPS_BUILDER := $(CLOSURE_BASE)/depswriter.py
 CLOSURE_JAR := tools/closure/compiler.jar
 JS_FILES := js/
 JS_NAMESPACE := zeimyth.game.base
 JS_DEST := target/js/game-compiled.js
+JS_DEPS_DEST := target/js/game-deps.js
 
 ###############################################
 # Common Targets                              #
@@ -29,11 +32,13 @@ help:
 	@echo
 	@echo "### Build Targets ###"
 	@echo "css           Less CSS compiler"
+	@echo "deps          Javascript dependency resolver"
 	@echo "js            Closure Javascript compiler"
 	@echo
 	@echo "### Clean Targets ###"
 	@echo "clean-css     Clean css"
 	@echo "clean-js      Clean js"
+	@echo "clean-deps    Clean dependency file"
 
 .PHONY: clean
 clean: clean-css clean-js
@@ -81,6 +86,15 @@ js:
 
 clean-js:
 	rm -f $(JS_DEST)
+
+.PHONY: deps clean-deps
+deps:
+	$(CLOSURE_DEPS_BUILDER)                                   \
+	--root_with_prefix="$(JS_FILES) ../../../../$(JS_FILES)"  \
+	--output_file=$(JS_DEPS_DEST)
+
+clean-deps:
+	rm -f $(JS_DEPS_DEST)
 
 ###############################################
 # Install Target                              #
