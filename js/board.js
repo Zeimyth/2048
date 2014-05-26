@@ -86,6 +86,7 @@ zeimyth.Board.prototype.placeRandomTile = function() {
  */
 zeimyth.Board.prototype.render = function() {
 	var outerDiv = this.domHelper.getElementByClass('gamegrid');
+	this.domHelper.removeChildren(outerDiv);
 
 	var dimensions = zeimyth.game.getDimensions();
 
