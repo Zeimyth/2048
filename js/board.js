@@ -1,6 +1,7 @@
 goog.provide('zeimyth.Board');
 
 goog.require('goog.dom');
+goog.require('zeimyth.util.scalar');
 
 /**
  * @constructor
@@ -141,41 +142,41 @@ zeimyth.Board.prototype.shiftGrid = function(dir) {
 
 	switch(zeimyth.Board.Directions[dir]) {
 		case zeimyth.Board.Directions['up']:
-			if (goog.array.some(this.grid, function(row) {
-				for (var x = 0; x < dimensions.width - 1; x++) {
-					if (!row[x].value && row[x+1].value) {
+			if (zeimyth.util.scalar.forSome(dimensions.width, function(x) {
+				for (var y = 0; y < dimensions.height - 1; y++) {
+					if (!this.grid[x][y].value && this.grid[x][y+1].value) {
 						return true;
 					}
-					else if (row[x].value && row[x].value == row[x+1].value) {
+					else if (this.grid[x][y].value && this.grid[x][y].value == this.grid[x][y+1].value) {
 						return true;
 					}
 				}
 
 				return false;
-			})) {
-				goog.array.forEach(this.grid, function(row) {
-					for (var x = 1; x < dimensions.width; x++) {
-						if (!!row[x].value) {
+			}, this)) {
+				zeimyth.util.scalar.forEach(dimensions.width, function(x) {
+					for (var y = 1; y < dimensions.height; y++) {
+						if (!!this.grid[x][y].value) {
 							var done = false;
-							for (var dx = x - 1; dx >= 0 && !done; dx--) {
-								if (!row[dx].value) {
-									row[dx] = row[x];
-									row[x] = {className: 'empty'};
-									x--;
+							for (var dy = y - 1; dy >= 0 && !done; dy--) {
+								if (!this.grid[x][dy].value) {
+									this.grid[x][dy] = this.grid[x][y];
+									this.grid[x][y] = {className: 'empty'};
+									y--;
 								}
-								else if (row[dx].value == row[x].value && !row[dx].locked) {
+								else if (this.grid[x][dy].value == this.grid[x][y].value && !this.grid[x][dy].locked) {
 									var newClassName = '';
-									var newValue = 2 * row[x].value;
+									var newValue = 2 * this.grid[x][y].value;
 
-									if (row[x].value == '2') {
+									if (this.grid[x][y].value == '2') {
 										newClassName = 'four';
 									}
 									else {
 										newClassName = 'eight';
 									}
 
-									row[dx] = {className: newClassName, value: newValue, locked: true};
-									row[x] = {className: 'empty'};
+									this.grid[x][dy] = {className: newClassName, value: newValue, locked: true};
+									this.grid[x][y] = {className: 'empty'};
 									done = true;
 								}
 								else {
@@ -184,10 +185,10 @@ zeimyth.Board.prototype.shiftGrid = function(dir) {
 							}
 						}
 					}
-					for (var x = 0; x < dimensions.width; x++) {
-						row[x].locked = false;
+					for (var y = 0; y < dimensions.height; y++) {
+						this.grid[x][y].locked = false;
 					}
-				});
+				}, this);
 				this.placeRandomTile();
 			}
 	}
