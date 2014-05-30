@@ -12,4 +12,3 @@ zeimyth.util.getRandom = function(bound, offset) {
 	
 	return Math.floor(Math.random() * bound) + offset;
 };
-
