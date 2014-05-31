@@ -141,6 +141,47 @@ zeimyth.Board.prototype.shiftGrid = function(dir) {
 	var dimensions = zeimyth.game.getDimensions();
 
 	switch(zeimyth.Board.Directions[dir]) {
+		case zeimyth.Board.Directions['right']:
+			if (zeimyth.util.scalar.forSome(dimensions.height, function(y) {
+				for (var x = dimensions.width - 1; x > 0; x--) {
+					if (!this.grid[x][y].value && this.grid[x-1][y].value) {
+						return true;
+					}
+					else if (this.grid[x][y].value && this.grid[x][y].value == this.grid[x-1][y].value) {
+						return true;
+					}
+				}
+
+				return false;
+			}, this)) {
+				zeimyth.util.scalar.forEach(dimensions.height, function(y) {
+					var x;
+					for (x = dimensions.width - 2; x >= 0; x--) {
+						if (!!this.grid[x][y].value) {
+							var done = false;
+							for (var dx = x + 1; dx < dimensions.width && !done; dx++) {
+								if (!this.grid[dx][y].value) {
+									this.grid[dx][y] = this.grid[x][y];
+									this.grid[x][y] = {className: 'empty'};
+									x++;
+								}
+								else if (this.grid[dx][y].value == this.grid[x][y].value && !this.grid[dx][y].locked) {
+									this.combineTiles({x: dx, y: y}, {x: x, y: y});
+									done = true;
+								}
+								else {
+									done = true;
+								}
+							}
+						}
+					}
+					for (x = 0; x < dimensions.width; x++) {
+						this.grid[x][y].locked = false;
+					}
+				}, this);
+				this.placeRandomTile();
+			}
+			break;
 		case zeimyth.Board.Directions['up']:
 			if (zeimyth.util.scalar.forSome(dimensions.width, function(x) {
 				for (var y = 0; y < dimensions.height - 1; y++) {
@@ -182,6 +223,47 @@ zeimyth.Board.prototype.shiftGrid = function(dir) {
 				this.placeRandomTile();
 			}
 			break;
+		case zeimyth.Board.Directions['left']:
+			if (zeimyth.util.scalar.forSome(dimensions.height, function(y) {
+				for (var x = 0; x < dimensions.width - 1; x++) {
+					if (!this.grid[x][y].value && this.grid[x+1][y].value) {
+						return true;
+					}
+					else if (this.grid[x][y].value && this.grid[x][y].value == this.grid[x+1][y].value) {
+						return true;
+					}
+				}
+
+				return false;
+			}, this)) {
+				zeimyth.util.scalar.forEach(dimensions.height, function(y) {
+					var x;
+					for (x = 1; x < dimensions.width; x++) {
+						if (!!this.grid[x][y].value) {
+							var done = false;
+							for (var dx = x - 1; dx >= 0 && !done; dx--) {
+								if (!this.grid[dx][y].value) {
+									this.grid[dx][y] = this.grid[x][y];
+									this.grid[x][y] = {className: 'empty'};
+									x--;
+								}
+								else if (this.grid[dx][y].value == this.grid[x][y].value && !this.grid[dx][y].locked) {
+									this.combineTiles({x: dx, y: y}, {x: x, y: y});
+									done = true;
+								}
+								else {
+									done = true;
+								}
+							}
+						}
+					}
+					for (x = 0; x < dimensions.width; x++) {
+						this.grid[x][y].locked = false;
+					}
+				}, this);
+				this.placeRandomTile();
+			}
+			break;
 		case zeimyth.Board.Directions['down']:
 			if (zeimyth.util.scalar.forSome(dimensions.width, function(x) {
 				for (var y = dimensions.height - 1; y > 0; y--) {
@@ -197,7 +279,7 @@ zeimyth.Board.prototype.shiftGrid = function(dir) {
 			}, this)) {
 				zeimyth.util.scalar.forEach(dimensions.width, function(x) {
 					var y;
-					for (y = dimensions.height - 1; y >= 0; y--) {
+					for (y = dimensions.height - 2; y >= 0; y--) {
 						if (!!this.grid[x][y].value) {
 							var done = false;
 							for (var dy = y + 1; dy < dimensions.height && !done; dy++) {
