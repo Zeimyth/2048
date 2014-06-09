@@ -318,6 +318,8 @@ zeimyth.Board.prototype.shiftGrid = function(dir) {
 /**
  * @param  {{x: number, y: number}} tile1 The tile where the combination will stay
  * @param  {{x: number, y: number}} tile2 The tile that will disappear in the combination process
+ *
+ * @private
  */
 zeimyth.Board.prototype.combineTiles = function(tile1, tile2) {
 	var newValue = 2 * this.grid[tile1.x][tile1.y].value;
@@ -328,7 +330,7 @@ zeimyth.Board.prototype.combineTiles = function(tile1, tile2) {
 
 /**
  * Returns the CSS class name associated with the given number value.
- * 
+ *
  * @param  {number} value The value of the tile whose background you're looking up
  * @return {string} the class name for this tile
  *
