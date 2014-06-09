@@ -97,6 +97,11 @@ zeimyth.Board.prototype.randomValue = function() {
 	}
 };
 
+zeimyth.Board.prototype.update = function() {
+	this.render();
+	this.checkWinConditions();
+};
+
 zeimyth.Board.prototype.render = function() {
 	this.renderBoard();
 	this.renderScore();
@@ -145,11 +150,43 @@ zeimyth.Board.prototype.renderScore = function() {
 };
 
 /**
+ * @private
+ */
+zeimyth.Board.prototype.checkWinConditions = function() {
+	var emptyTile = false;
+	var winningTile = false;
+
+	var dimensions = zeimyth.game.getDimensions();
+
+	for (var x = 0; x < dimensions.width; x++) {
+		for (var y = 0; y < dimensions.height; y++) {
+			if (this.grid[x][y].value) {
+				if (this.grid[x][y].value == 2048) {
+					winningTile = true;
+				}
+			}
+			else {
+				emptyTile = true;
+			}
+		}
+	}
+
+	if (winningTile) {
+		zeimyth.game.setGameWon();
+	}
+	else if (!emptyTile) {
+		zeimyth.game.setGameLost();
+	}
+};
+
+/**
  * @param {string} dir
  */
 zeimyth.Board.prototype.handleDirection = function(dir) {
-	this.shiftGrid(dir);
-	this.render();
+	if (!zeimyth.game.isOver()) {
+		this.shiftGrid(dir);
+		this.update();
+	}
 };
 
 /**
