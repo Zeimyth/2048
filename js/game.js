@@ -10,7 +10,13 @@ goog.require('zeimyth.events');
  */
 zeimyth.game.dimensions = { width: 4, height: 4 };
 
+/** @private */
+zeimyth.game.score = 0;
+
 zeimyth.game.getDimensions = function() { return zeimyth.game.dimensions; };
+
+zeimyth.game.getScore = function() { return zeimyth.game.score; };
+zeimyth.game.incrementScore = function(amt) { zeimyth.game.score += amt; };
 
 /** @private */
 zeimyth.game.gameBoard = new zeimyth.Board();

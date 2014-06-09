@@ -97,10 +97,15 @@ zeimyth.Board.prototype.randomValue = function() {
 	}
 };
 
+zeimyth.Board.prototype.render = function() {
+	this.renderBoard();
+	this.renderScore();
+};
+
 /**
  * @private
  */
-zeimyth.Board.prototype.render = function() {
+zeimyth.Board.prototype.renderBoard = function() {
 	var outerDiv = this.domHelper.getElementByClass('gamegrid');
 	this.domHelper.removeChildren(outerDiv);
 
@@ -129,6 +134,14 @@ zeimyth.Board.prototype.render = function() {
 
 		this.domHelper.appendChild(outerDiv, row);
 	}
+};
+
+/**
+ * @private
+ */
+zeimyth.Board.prototype.renderScore = function() {
+	var scoreElem = this.domHelper.getElement('score');
+	scoreElem.innerText = zeimyth.game.getScore();
 };
 
 /**
@@ -323,6 +336,8 @@ zeimyth.Board.prototype.shiftGrid = function(dir) {
  */
 zeimyth.Board.prototype.combineTiles = function(tile1, tile2) {
 	var newValue = 2 * this.grid[tile1.x][tile1.y].value;
+
+	zeimyth.game.incrementScore(newValue);
 
 	this.grid[tile1.x][tile1.y] = {className: this.getClassName(newValue), value: newValue, locked: true};
 	this.grid[tile2.x][tile2.y] = {className: 'empty'};
