@@ -56,38 +56,45 @@ zeimyth.Board.prototype.initializeGrid = function(dimensions) {
 zeimyth.Board.prototype.placeRandomTile = function() {
 	var me = this;
 
-	var dimensions = zeimyth.game.getDimensions();
-
-	/**
-	 * @return {{x: number, y: number}}
-	 */
-	var randomCoord = function() {
-		var x = zeimyth.util.getRandom(dimensions.width);
-		var y = zeimyth.util.getRandom(dimensions.height);
-
-		return {x: x, y: y};
-	};
-
-	var randomValue = function() {
-		var roll = zeimyth.util.getRandom(me.fourWeight);
-		var two = {className: 'two', value: 2};
-		var four = {className: 'four', value: 4};
-
-		if (roll) {
-			return two;
-		}
-		else {
-			return four;
-		}
-	};
-
-	var coord = randomCoord();
+	var coord = this.randomCoord();
 
 	while (this.grid[coord.x][coord.y].value) {
-		coord = randomCoord();
+		coord = this.randomCoord();
 	}
 
-	this.grid[coord.x][coord.y] = randomValue();
+	this.grid[coord.x][coord.y] = this.randomValue();
+};
+
+/**
+ * @return {{x: number, y: number}}
+ *
+ * @private
+ */
+zeimyth.Board.prototype.randomCoord = function() {
+	var dimensions = zeimyth.game.getDimensions();
+
+	var x = zeimyth.util.getRandom(dimensions.width);
+	var y = zeimyth.util.getRandom(dimensions.height);
+
+	return {x: x, y: y};
+};
+
+/**
+ * @return {{className: string, value: number}}
+ *
+ * @private
+ */
+zeimyth.Board.prototype.randomValue = function() {
+	var roll = zeimyth.util.getRandom(this.fourWeight);
+	var two = {className: this.getClassName(2), value: 2};
+	var four = {className: this.getClassName(4), value: 4};
+
+	if (roll) {
+		return two;
+	}
+	else {
+		return four;
+	}
 };
 
 /**
@@ -313,19 +320,33 @@ zeimyth.Board.prototype.shiftGrid = function(dir) {
  * @param  {{x: number, y: number}} tile2 The tile that will disappear in the combination process
  */
 zeimyth.Board.prototype.combineTiles = function(tile1, tile2) {
-	var newClassName = '';
 	var newValue = 2 * this.grid[tile1.x][tile1.y].value;
 
-	if (this.grid[tile1.x][tile1.y].value == '2') {
-		newClassName = 'four';
-	}
-	else if (this.grid[tile1.x][tile1.y].value == '4') {
-		newClassName = 'eight';
-	}
-	else {
-		newClassName = 'sixteen';
-	}
-
-	this.grid[tile1.x][tile1.y] = {className: newClassName, value: newValue, locked: true};
+	this.grid[tile1.x][tile1.y] = {className: this.getClassName(newValue), value: newValue, locked: true};
 	this.grid[tile2.x][tile2.y] = {className: 'empty'};
+};
+
+/**
+ * Returns the CSS class name associated with the given number value.
+ * 
+ * @param  {number} value The value of the tile whose background you're looking up
+ * @return {string} the class name for this tile
+ *
+ * @private
+ */
+zeimyth.Board.prototype.getClassName = function(value) {
+	switch (value) {
+		case 2: return 'two';
+		case 4: return 'four';
+		case 8: return 'eight';
+		case 16: return 'sixteen';
+		case 32: return 'thirty-two';
+		case 64: return 'sixty-four';
+		case 128: return 'one-hundred-twenty-eight';
+		case 256: return 'two-hundred-fifty-six';
+		case 512: return 'five-hundred-twelve';
+		case 1024: return 'one-thousand-twenty-four';
+		case 2048: return 'two-thousand-fourty-eight';
+		default: return 'empty';
+	}
 };
